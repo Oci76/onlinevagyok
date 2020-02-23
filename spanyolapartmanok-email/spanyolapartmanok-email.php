@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Spanyol Apartmanok email
-Version: 1.0.1
+Version: 1.0.2
 Description: Spanyol Apartmanok email
 Author: OnlineVagyok
 Author URI: https://onlinevagyok.hu
@@ -57,17 +57,21 @@ function sae_change_admin_new_order_email_recipient( $recipient, $object ) {
 
     // Post meta lekérés
     // get_post_meta($post_id, $meta_key, $meta_value);
-    $product_email = get_post_meta($product_id, 'sae_custom_field', true);
+    $product_email_er = get_post_meta($product_id, 'sae_custom_field', true); // $product_email_er a mezőbe írt érték
 
-    if (isset($product_email) && is_email($product_email)) {
-      if(!in_array($product_email, $product_emails, true)){
-        array_push($product_emails, $product_email);
-        $recipient .= ",$product_email";
-    }
+    $product_email_er = str_replace(" ", "", $product_email_er); // kiszedjük  " "-t
+    $product_email_ers = explode(",",$product_email_er); //áttesszük tömbbe
+
+    foreach ($product_email_ers as $product_email) {
+
+        if (isset($product_email) && is_email($product_email)) {
+            if(!in_array($product_email, $product_emails, true)){
+                array_push($product_emails, $product_email);
+                $recipient .= ",$product_email";
+            }
+        }
     }
   }
 
   return $recipient;
 }
-
-
